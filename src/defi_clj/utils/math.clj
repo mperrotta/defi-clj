@@ -2,22 +2,27 @@
   (:import [java.util BitSet]))
 
 
+(def byte-array-type (Class/forName "[B"))
+
+
+;;TODO: make this support returning a transducer
 (defn group-byte-array-by-bits
   [bytes group-bit-size]
 
-
-  (let [total-bits (* (count bytes) 8)]
+  (let [total-bits (* (count bytes) 8)
+        bytes (if (not= (type bytes) byte-array-type) (byte-array bytes) bytes)]
     (loop [bit-idx            0
            result             []]
       (let [bits-left (- total-bits bit-idx 1)]
-        (if (< bit-idx (- total-bits 1))
+        (if (and (< bit-idx (- total-bits 1))
+                (> bits-left group-bit-size))
           (let [new-bit-count (min group-bit-size bits-left)
                 new-number (reduce
                             (fn [acc idx]
                               (let [byte-idx (quot idx 8)
-                                    current-byte (bytes byte-idx)
+                                    current-byte (nth bytes byte-idx)
                                     byte-bit-idx (- 7 (mod idx 8))
-                                    new-number-bit-idx (mod idx 11)
+                                    new-number-bit-idx (mod idx group-bit-size)
                                     current-bit-set (> (bit-and current-byte (bit-shift-left 1 byte-bit-idx)) 0)
                                     shift-amount (- group-bit-size new-number-bit-idx 1)]
 

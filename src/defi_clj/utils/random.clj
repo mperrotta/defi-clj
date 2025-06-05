@@ -7,4 +7,4 @@
   (let [random (SecureRandom.)
         buffer (byte-array num-bytes)]
     (.nextBytes random buffer)
-    (vec buffer)))
+    buffer))
