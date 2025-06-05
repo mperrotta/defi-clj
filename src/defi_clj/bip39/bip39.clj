@@ -25,13 +25,12 @@
                        (random/generate-random-bytes (/ strength 8)))
 
         checksum (hashing/first-sha256-checksum-byte random-bytes (/ strength 32))
-        bit-groups (math/group-byte-array-by-bits (byte-array (conj (vec random-bytes) checksum)) 11)]
+        entropy (byte-array (conj (vec random-bytes) checksum))
+        bit-groups (math/group-byte-array-by-bits entropy 11)]
 
-    (->> (map (fn [idx] (english/wordlist idx)) bit-groups)
-         (str/join " "))))
-
-
-
+    {:mnemonic (->> (map (fn [idx] (english/wordlist idx)) bit-groups)
+                    (str/join " "))
+     :entropy entropy }))
 
 
 (comment
