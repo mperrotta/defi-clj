@@ -1,7 +1,7 @@
 (ns defi-clj.bip39
   (:require [defi-clj.utils.random :as random]
             [defi-clj.crypto.hashing :as hashing]
-            [defi-clj.utils.math :as math]
+            [defi-clj.utils.bits :as bits]
             [defi-clj.bip39.english :as english]
             [clojure.string :as str])
   (:import [com.google.common.primitives Bytes]))
@@ -26,7 +26,7 @@
 
         checksum (hashing/first-sha256-checksum-byte random-bytes (/ strength 32))
         entropy (byte-array (conj (vec random-bytes) checksum))
-        bit-groups (math/group-byte-array-by-bits entropy 11)]
+        bit-groups (bits/group-byte-array-by-bits entropy 11)]
 
     {:mnemonic (->> (map (fn [idx] (english/wordlist idx)) bit-groups)
                     (str/join " "))
