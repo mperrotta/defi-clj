@@ -70,12 +70,11 @@
         bit-length (.bitLength k)]
     (reduce (fn [new-point bit-idx]
               (let [current-point (double-point new-point curve)]
-                (println (.testBit k bit-idx))
                 (if (.testBit k bit-idx)
                   (add-points current-point point curve)
                   current-point)))
             point
-            (range 1 bit-length))))
+            (range (- bit-length 2) -1 -1 ))))
 
 (defn get-public-key
   [private-key]
@@ -116,8 +115,8 @@
   (do
     (def mpoint (multiply-point the-point the-curve 80311422861268649470766285442089814410896094309801588279145814515479634419270))
 
-    (def x (.getAffineX p1p2))
-    (def y (.getAffineY p1p2))
+    (def x (.getAffineX mpoint))
+    (def y (.getAffineY mpoint))
 
     (assert (= x 61840256099038076754287242193351274813909580701985848613511531832199855295241))
     (assert (= y 90189816713920330277450622528770787569194417131198530198732192995443182948254))

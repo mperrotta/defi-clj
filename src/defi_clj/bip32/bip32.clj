@@ -16,7 +16,8 @@
     {:versions btc-versions
      :chain-code (Arrays/copyOfRange hmac 32 (alength hmac))
      :private-key (Arrays/copyOfRange hmac 0 32)
-     :public-key }) )
+     :public-key nil ;;TODO
+     }) )
 
 
 (defn gen-child-from-root
