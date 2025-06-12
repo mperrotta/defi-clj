@@ -78,8 +78,8 @@
 
 (defn get-public-key
   [private-key]
-
-  (let []))
+  (assert (and (>= private-key 1) (< private-key N)))
+  (multiply-point the-point the-curve private-key))
 
 
 
