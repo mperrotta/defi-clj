@@ -11,8 +11,12 @@
 (def get-hmac-sha512-instance (memoize (fn []
                                          (Mac/getInstance "HmacSHA512"))))
 
+(def get-hmac-sha256-instance (memoize (fn []
+                                         (Mac/getInstance "HmacSHA256"))))
+
 (def hmac-algo-map
-  {:sha-512 (get-hmac-sha512-instance)})
+  {:sha-512 (get-hmac-sha512-instance)
+   :sha-256 (get-hmac-sha256-instance)})
 
 (defn sha256
   [bytes]
@@ -30,7 +34,7 @@
 
 
 (defn get-hmac
-  "hash-algo can be anyone of the following keywords [:sha-512]"
+  "hash-algo can be anyone of the following keywords [:sha-512 :sha-256]"
   [hash-algo seed data]
   (let [hmac (if-let [instance (hmac-algo-map hash-algo)] instance (throw (Exception. (str "hash-algo " hash-algo " not found"))))
         key (SecretKeySpec. seed (.getAlgorithm hmac))]
